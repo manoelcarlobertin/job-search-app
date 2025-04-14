@@ -12,27 +12,82 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="#">Job Search App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand" href="/">Job Search App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" href="#">Início</a>
+              <%= link_to "Início", root_path, class: "nav-link #{current_page?(root_path) ? 'active' : ''}" %>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Sobre</a>
+              <%#= link_to "Sobre", about_path, class: "nav-link #{current_page?(about_path) ? 'active' : ''}" %>
             </li>
           </ul>
+          <div class="d-flex align-items-center">
+            <% if user_signed_in? %>
+              <div class="dropdown">
+                <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  <%= current_user.email %>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                  <%= link_to "Meu Perfil", edit_user_registration_path, class: "dropdown-item" %>
+                  <%#= link_to "Minhas Vagas", jobs_path, class: "dropdown-item" %>
+                  <%#= link_to "Minhas Candidaturas", applications_path, class: "dropdown-item" %>
+                  <#% if current_user.company? %>
+                    <%#= link_to "Gerenciar Vagas", company_jobs_path, class: "dropdown-item" %>
+                    <%#= link_to "Candidatos", company_applications_path, class: "dropdown-item" %>
+                  <%# end %>
+                  <div class="dropdown-divider"></div>
+                  <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item text-danger" %>
+                </ul>
+              </div>
+            
+            <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item text-danger" %>
+            <% else %>
+              <%= link_to "Entrar", new_user_session_path, class: "btn btn-outline-light me-2" %>
+              <%= link_to "Cadastrar", new_user_registration_path, class: "btn btn-primary" %>
+            <% end %>          </div>
         </div>
       </div>
     </nav>
 
-    <div class="container">
+    <main class="container mt-5 pt-4">
+      <% if notice %>
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if flash[:success] %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= flash[:success] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if flash[:error] %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= flash[:error] %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <%= alert %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
+
       <%= yield %>
-    </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container text-center">
+        <span class="text-muted">© <%= Time.current.year %> Job Search App. Todos os direitos reservados.</span>
+      </div>
+    </footer>
   </body>
 </html>
