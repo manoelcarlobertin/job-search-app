@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container container-fluid"></div>
+    <%#= link_to image_tag("logo.png", alt: "Logo", class: "navbar-brand"), root_path %>
+    <%= link_to root_path, class: "navbar-brand" do %>
+      <h2 class="mb-0 text-primary">Job Search App</h2>
+    <% end %>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <%= link_to "Vagas", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+        </li>
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <%= link_to "Meu Perfil", edit_user_registration_path, class: "dropdown-item" %>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "dropdown-item text-danger" %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "Entrar", new_user_session_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Cadastrar", new_user_registration_path, class: "btn btn-primary ms-2" %>
+          </li>
+        <% end %>
+
+        <% unless company_signed_in? %>
+          <li class="nav-item">
+            <a class="nav-link" href="/companies/sign_up">Anunciar</a>
+          </li>
+        <% else%>
+          <li class="nav-item">
+            <a class="nav-link" href="/vacancies/new">Anunciar</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/vacancies">Meus Anúncios</a>
+          </li>
+        <% end %>
+
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <% if company_signed_in? %>
+          <li class="nav-item">
+            <%= button_to "Sair", destroy_company_session_path, method: :delete, class: "btn btn-outline-primary" %>
+          </li>
+        <%  else %>
+          <li class="nav-item">
+            <%= link_to "Entrar", new_company_session_path, class: "btn btn-outline-primary" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
